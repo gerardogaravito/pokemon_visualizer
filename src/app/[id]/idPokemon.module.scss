@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 70vw;
+  margin-left: auto;
+  margin-right: auto;
+  color: #fff;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: inherit;
+    margin-top: 24px;
+  }
+
+  &__title {
+    margin-bottom: 36px;
+  }
+}
+
+.home {
+  text-decoration: underline;
+  color: #163af5;
+
+  &:hover {
+    color: white;
+    cursor: pointer;
+  }
+}
+
+.webButton {
+  margin-top: 24px;
+}
+
+.tableItem {
+  color: #fff;
+}
+
+.loading {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

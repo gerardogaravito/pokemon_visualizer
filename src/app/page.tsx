@@ -1,95 +1,72 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client';
+import { useEffect, useState } from 'react';
+import styles from './page.module.scss';
+import dynamic from 'next/dynamic';
+
+import { GeneralPokemonType, PokemonsApiResponse } from './api/route';
+import { Alert, CircularProgress, List, Snackbar } from '@mui/material';
+import Link from 'next/link';
+
+const RangeSelect = dynamic(
+  () => import('./components').then((mod) => mod.RangeSelect),
+  {
+    ssr: false,
+  }
+);
+
+const PokemonList = dynamic(
+  () => import('./components').then((mod) => mod.PokemonList),
+  {
+    ssr: false,
+  }
+);
 
 export default function Home() {
+  const [pokemonList, setPokemonList] = useState<GeneralPokemonType[]>([]);
+  const [requestFrom, setRequestFrom] = useState<number>(0);
+  const [showSuccess, setShowSuccess] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch(`/api?from=${requestFrom * 20}`)
+      .then((res) => res.json())
+      .then(({ data }: { data: PokemonsApiResponse }) => {
+        setShowSuccess(true);
+        setPokemonList(data.results);
+      })
+      .finally(() => setIsLoading(false))
+      .catch((err) => console.error('error: ', err));
+
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 3000);
+  }, [requestFrom]);
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+      <h1 className={styles.title}>pokemon visualizer</h1>
+      <Link className={styles.bio} href='/bio'>
+        bio: gerardo garavito
+      </Link>
+      <RangeSelect requestFrom={requestFrom} setRequestFrom={setRequestFrom} />
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        <List
+          dense={false}
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+          }}
         >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+          <PokemonList pokemonList={pokemonList} />
+        </List>
+      )}
+      <Snackbar open={showSuccess} autoHideDuration={3000}>
+        <Alert severity='success'>Pokemon List updated</Alert>
+      </Snackbar>
     </main>
-  )
+  );
 }
