@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext, useContext } from 'react';
 import styles from './page.module.scss';
 import dynamic from 'next/dynamic';
 
@@ -21,9 +21,16 @@ const PokemonList = dynamic(
   }
 );
 
+export const PageContext = createContext({
+  requestFrom: 0,
+  setRequestFrom: (newForm: number) => {},
+});
+
 export default function Home() {
-  const [pokemonList, setPokemonList] = useState<GeneralPokemonType[]>([]);
+  // contextState
   const [requestFrom, setRequestFrom] = useState<number>(0);
+
+  const [pokemonList, setPokemonList] = useState<GeneralPokemonType[]>([]);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -40,33 +47,35 @@ export default function Home() {
 
     setTimeout(() => {
       setShowSuccess(false);
-    }, 3000);
+    }, 1000);
   }, [requestFrom]);
 
   return (
-    <main className={styles.main}>
-      <h1 className={styles.title}>pokemon visualizer</h1>
-      <Link className={styles.bio} href='/bio'>
-        bio: gerardo garavito
-      </Link>
-      <RangeSelect requestFrom={requestFrom} setRequestFrom={setRequestFrom} />
-      {isLoading ? (
-        <CircularProgress />
-      ) : (
-        <List
-          dense={false}
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-          }}
-        >
-          <PokemonList pokemonList={pokemonList} />
-        </List>
-      )}
-      <Snackbar open={showSuccess} autoHideDuration={3000}>
-        <Alert severity='success'>Pokemon List updated</Alert>
-      </Snackbar>
-    </main>
+    <PageContext.Provider value={{ requestFrom, setRequestFrom }}>
+      <main className={styles.main}>
+        <h1 className={styles.title}>pokemon visualizer</h1>
+        <Link className={styles.bio} href='/bio'>
+          bio: gerardo garavito
+        </Link>
+        <RangeSelect />
+        {isLoading ? (
+          <CircularProgress />
+        ) : (
+          <List
+            dense={false}
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+            }}
+          >
+            <PokemonList pokemonList={pokemonList} />
+          </List>
+        )}
+        <Snackbar open={showSuccess} autoHideDuration={1000}>
+          <Alert severity='success'>Pokemon List updated</Alert>
+        </Snackbar>
+      </main>
+    </PageContext.Provider>
   );
 }
