@@ -51,7 +51,7 @@ export default function Bio() {
         startup environments, design, and learning about technology.
       </Typography>
       <Button
-        className={styles.webButton}
+        style={{ marginTop: 24 }}
         variant='outlined'
         endIcon={<NavigateNext />}
         onClick={handleNavigation}

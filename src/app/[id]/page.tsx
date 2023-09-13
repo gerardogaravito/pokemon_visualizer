@@ -71,14 +71,14 @@ export default function IdPokemon({ params }: { params: { id: string } }) {
       >
         <TableHead>
           <TableRow>
-            <TableCell className={styles.tableItem}>Id</TableCell>
-            <TableCell className={styles.tableItem} align='left'>
+            <TableCell style={{ color: '#fff' }}>Id</TableCell>
+            <TableCell style={{ color: '#fff' }} align='left'>
               Base Experience
             </TableCell>
-            <TableCell className={styles.tableItem} align='left'>
+            <TableCell style={{ color: '#fff' }} align='left'>
               Height
             </TableCell>
-            <TableCell className={styles.tableItem} align='left'>
+            <TableCell style={{ color: '#fff' }} align='left'>
               Weight
             </TableCell>
           </TableRow>
@@ -88,16 +88,16 @@ export default function IdPokemon({ params }: { params: { id: string } }) {
             key={params.id}
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
           >
-            <TableCell className={styles.tableItem} component='th' scope='row'>
+            <TableCell style={{ color: '#fff' }} component='th' scope='row'>
               {params.id}
             </TableCell>
-            <TableCell className={styles.tableItem} align='left'>
+            <TableCell style={{ color: '#fff' }} align='left'>
               {pokeData.base_experience}
             </TableCell>
-            <TableCell className={styles.tableItem} align='left'>
+            <TableCell style={{ color: '#fff' }} align='left'>
               {pokeData.height}
             </TableCell>
-            <TableCell className={styles.tableItem} align='left'>
+            <TableCell style={{ color: '#fff' }} align='left'>
               {pokeData.weight}
             </TableCell>
           </TableRow>
