@@ -5,12 +5,13 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import { PageContextProvider } from './PageContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Doorvel test',
-  description: 'doorvel',
+  title: 'pokemon visualizer',
+  description: 'practice project',
 };
 
 export default function RootLayout({
@@ -20,7 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={inter.className}>{children}</body>
+      <PageContextProvider>
+        <body className={inter.className}>{children}</body>
+      </PageContextProvider>
     </html>
   );
 }

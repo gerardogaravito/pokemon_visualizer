@@ -1,13 +1,13 @@
 'use client';
-import React, { FC, useState, useContext } from 'react';
+import React, { FC, useState } from 'react';
 import styles from './rangeSelect.module.scss';
 import Button from '@mui/material/Button';
 import FolderIcon from '@mui/icons-material/Add';
-import { PageContext } from '../../page';
+import { usePageContext } from '@/app/PageContext';
 
 const RangeSelect: FC = () => {
   const [groupsQuantity, setGroupsQuantity] = useState<number>(3);
-  let { requestFrom, setRequestFrom } = useContext(PageContext);
+  const { requestFrom, setRequestFrom } = usePageContext();
 
   const handleMutateRange = (newFrom: number) => {
     setRequestFrom(newFrom);
